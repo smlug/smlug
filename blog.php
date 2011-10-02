@@ -1,4 +1,8 @@
 <?php
+
+$posts = '';
+$numbers = '';
+
 if(isset($_GET['add'], $_POST['post_name'], $_POST['post_body'])) {
   if(mysql_query("INSERT INTO blog(`author`, `name`, `body`) VALUES('1', '" . htmlspecialchars($_POST['post_name']) . "', '" . htmlspecialchars($_POST['post_body']) . "')"))
     $content .= 'Запись успешно добавлена';
@@ -24,7 +28,7 @@ else {
         $author = $linuxoids_array[$j]['login'];
 
     //Выводим публикацию блога
-    $content .= template('templates/post_preview.tpl', array(
+    $posts .= template('templates/post_preview.tpl', array(
       'NAME' => '<a href = "">' . $posts_array[$i]['name'] . '</a>',
       'AUTHOR' => '<font size = "4px">↑</font> ' . $author,
       'BODY' => $posts_array[$i]['body'],
@@ -32,5 +36,40 @@ else {
       'NUMBER_OF_COMMENTS' => '5'
     ));
   }
+
+  //Постраничная навигация
+
+  if(empty($_GET['number']))
+    $_GET['number'] = 1;
+
+  $previous = $_GET['number'] - 1;
+  $next = $_GET['number'] + 1;
+
+  //Стрелка "назад"
+  if($_GET['number'] > 1)
+    $numbers .= '<a href = "?page=blog&number=' . $previous . '">↑</a> ';
+  else
+    $numbers .= '↑ ';
+
+  //Вывод номеров страниц
+  for($i = 1; $i <= $pages = ceil(count($posts_array) / $setting['posts_on_page']); $i++)
+  {
+    if($i == $_GET['number'])
+      $numbers .= $i . ' ';
+    else
+      $numbers .= '<a href = "?page=blog&number=' . $i . '">' . $i . '</a> ';
+  }
+
+  //Стрелка "вперёд"
+  if($_GET['number'] < $pages)
+    $numbers .= '<a href = "?page=blog&number=' . $next . '">↓</a> ';
+  else
+    $numbers .= '↓ ';
+
+  $content .= template('templates/blog.tpl', array(
+    'POSTS' => $posts,
+    'NUMBERS' => $numbers
+  ));
+
 }
 ?>

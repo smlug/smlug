@@ -120,6 +120,11 @@ hr {
   font-size: 11px;
 }
 
+#blog_numbers {
+  font-size: 45px;
+  padding-right: 25px;
+}
+
 #pagequote {
  font-size: 13px;
  font-style: italic;
