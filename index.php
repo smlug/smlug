@@ -5,22 +5,28 @@ include('functions.php');
 //Подключение к базе данных
 @mysql_connect($mysql['server'], $mysql['user'], $mysql['password'])
 or
-  die('Ошибка подключения к серверу баз данных!');
+  die('Error connecting to database!');
 
 @mysql_select_db($mysql['database'])
 or
-  die('Ошибка при выборе базы данных!');
+  die('Error database selection!');
 
 //Переменная, отвечающая за основной контент
 $content = '';
 
 //Выбор страницы
-if(isset($_GET['page']) && $_GET['page'] == 'registration')
-  include('registration.php');
-else if(isset($_GET['page']) && $_GET['page'] == 'linuxoids')
-  include('linuxoids.php');
-else if (isset($_GET['page']) && $_GET['page'] == 'blog')
-  include('blog.php');
+if(isset($_GET['page']))
+  switch($_GET['page']) {
+    case 'registration':
+      include('registration.php');
+      break;
+    case 'linuxoids':
+      include('linuxoids.php');
+      break;
+    case 'blog':
+      include('blog.php');
+      break;
+  }
 else
   $content = file_get_contents('templates/main.tpl');
 

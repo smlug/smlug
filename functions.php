@@ -22,7 +22,7 @@ function wordWrapIgnoreHtml($string, $lenght = 5, $divider = '<br />')
   $backUp = 0;
   $amp = 0;
 
-  for($i = 0; $i < strlen($string); $i++)
+  for($i = 0, $strlen = strlen($string); $i < $strlen; $i++)
   {
     $char = $string[$i];
 

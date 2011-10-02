@@ -3,20 +3,21 @@
 $posts = '';
 $numbers = '';
 
-if(isset($_GET['add'], $_POST['post_name'], $_POST['post_body'])) {
-  if(mysql_query("INSERT INTO blog(`author`, `name`, `body`) VALUES('1', '" . htmlspecialchars($_POST['post_name']) . "', '" . htmlspecialchars($_POST['post_body']) . "')"))
+if(isset($_GET['add'], $_POST['post_name'], $_POST['post_body']) && !is_array($_POST['post_name']) && !is_array($_POST['post_body']))
+  if(mysql_query("INSERT INTO blog(`author`, `name`, `body`) VALUES('1', '" . mysql_real_escape_string($_POST['post_name']) . "', '" . mysql_real_escape_string($_POST['post_body']) . "')"))
     $content .= 'Запись успешно добавлена';
   else
     $content .= 'Возникла ошибка, запись не добавлена';
-}
 else if(isset($_GET['add']))
   $content .= file_get_contents('templates/post_add.tpl');
 else {
   //Получаем список линуксоидов и заносим в массив
+  $linuxoids_array = array();
   $linuxoids_query = mysql_query("SELECT id, login FROM linuxoids");
   while($linuxoids_array[] = mysql_fetch_assoc($linuxoids_query));
 
   //Получаем список публикаций и заносим в массив
+  $posts_array = array();
   $blog_query = mysql_query('SELECT * FROM blog');
   while($posts_array[] = mysql_fetch_assoc($blog_query));
 
