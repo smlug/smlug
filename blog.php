@@ -53,13 +53,11 @@ else {
     $numbers .= '↑ ';
 
   //Вывод номеров страниц
-  for($i = 1; $i <= $pages = ceil(count($posts_array) / $setting['posts_on_page']); $i++)
-  {
+  for($i = 1, $pages = ceil((count($posts_array) - 1) / $setting['posts_on_page']); $i <= $pages; $i++)
     if($i == $_GET['number'])
       $numbers .= $i . ' ';
     else
       $numbers .= '<a href = "?page=blog&number=' . $i . '">' . $i . '</a> ';
-  }
 
   //Стрелка "вперёд"
   if($_GET['number'] < $pages)
