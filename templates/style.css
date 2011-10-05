@@ -21,9 +21,9 @@ a:hover{
   text-decoration: underline;
 }
 
-
-
-
+td.posts {
+  width: 100%;
+}
 
 header {
   display: block;
@@ -93,11 +93,18 @@ hr {
 
 .links {
  font: .9em Kalimati, Verdana, sans-serif;
+<<<<<<< HEAD
+}
+
+.links div {
+ margin: 8px;
+=======
  color: #171717;
 }
 
 .links div {
  margin-left: 4px;
+>>>>>>> smlug/master
 }
 
 .links h2 {

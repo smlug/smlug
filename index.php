@@ -2,7 +2,8 @@
 include('config.php');
 include('functions.php');
 
-//Подключение к базе данных
+/* Подключение к базе данных */
+
 @mysql_connect($cfg['db_server'], $cfg['db_user'], $cfg['db_password'])
 or
   die('Error occured during connecting to database!');

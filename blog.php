@@ -1,5 +1,4 @@
 <?php
-
 $posts = '';
 $numbers = '';
 
@@ -20,11 +19,16 @@ else {
   $posts_array = array();
   $blog_query = mysql_query('SELECT * FROM blog');
   while($posts_array[] = mysql_fetch_assoc($blog_query));
+  $posts_array_count = count($posts_array);
 
-  //Вывод публикаций
-  for($i = count($posts_array) - 2; $i >= 0; $i--) {
+  $pages = ceil((count($posts_array) - 1) / $cfg['posts_on_page']);
+  if(empty($_GET['number']) || $_GET['number'] > $pages)
+    $_GET['number'] = 1;
+
+  //Вывод публикаций блога
+  for($i = $posts_array_count - 2 - ($_GET['number'] * $cfg['posts_on_page'] - $cfg['posts_on_page']), $older_post_on_page = $posts_array_count - 2 - ($_GET['number'] * $cfg['posts_on_page']); $i >= 0 && $i > $older_post_on_page; $i--) {
     //Узнаём имя автора по его идентификатору
-    for($j = 0; $j < count($linuxoids_array); $j++)
+    for($j = 0, $linuxoids_array_count = count($linuxoids_array); $j < $linuxoids_array_count; $j++)
       if($linuxoids_array[$j]['id'] == $posts_array[$i]['author'])
         $author = $linuxoids_array[$j]['login'];
 
@@ -38,10 +42,7 @@ else {
     ));
   }
 
-  //Постраничная навигация
-
-  if(empty($_GET['number']))
-    $_GET['number'] = 1;
+  /* Постраничная навигация */
 
   $previous = $_GET['number'] - 1;
   $next = $_GET['number'] + 1;
@@ -53,7 +54,7 @@ else {
     $numbers .= '↑ ';
 
   //Вывод номеров страниц
-  for($i = 1, $pages = ceil((count($posts_array) - 1) / $cfg['posts_on_page']); $i <= $pages; $i++)
+  for($i = 1; $i <= $pages; $i++)
     if($i == $_GET['number'])
       $numbers .= $i . ' ';
     else
@@ -69,6 +70,5 @@ else {
     'POSTS' => $posts,
     'NUMBERS' => $numbers
   ));
-
 }
 ?>
