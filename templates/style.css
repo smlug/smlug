@@ -6,87 +6,70 @@ body {
   /* background: url(images/bg.png) repeat-x; */
 }
 
-a:link{
+a:link {
   color: #496178;
   text-decoration: underline;
 }
 
-a:visited{
+a:visited {
   color: #496178;
   text-decoration: underline;
 }
 
-a:hover{
+a:hover {
   color: #90a6bc;
   text-decoration: underline;
 }
 
-td.posts {
-  width: 100%;
-}
-
-header {
+/* this block for non-html5 browsers */
+header, article {
   display: block;
 }
 
-#main_table {
+.main_table {
   width: 800px;
 }
 
-#top {
+.top_of_main_table {
   height: 256px;
   background: url(images/imper.png) no-repeat center;
 }
 
-#smlug {
-  font-size: 40px;
-}
-
-#smlug_ru {
-  font-size: 35px;
-  color: #ebf0f4;
-}
-
-#nav_bar {
+.nav_bar {
   font-size: 18px;
   color: #a5b6c3;
 }
 
-#content {
+.smlug_en_link {
+  font-size: 40px;
 }
 
-#block {
+.smlug_ru {
+  font-size: 35px;
+  color: #ebf0f4;
+}
+
+.block {
   width: 200px;
 }
 
-#bottom {
+.bottom_of_main_table {
   padding-top: 20px;
   padding-bottom: 20px;
   color: #a1acab;
 }
 
-#navigation {
+.navigation {
   margin-top: 0px;
   margin-left: 15px;
   font-size: 45px;
   color: #dde5e4;
 }
 
-#nav_link {
-
-}
-
-#nav_link_2 {
-  font-size: 14px;
-}
-
 h3 {
  font-size: 20px;
  margin-top: 30px;
  color: #6b8381;
-}
-
-hr {
 }
 
 /* links block */
@@ -97,62 +80,66 @@ hr {
 }
 
 .links div {
- margin: 8px;
+  margin: 8px;
 =======
- color: #171717;
+  color: #171717;
 }
 
 .links div {
- margin-left: 4px;
+  margin-left: 4px;
 >>>>>>> smlug/master
 }
 
 .links h2 {
- font-size: 16px;
- margin-top: 20px;
- color: #6b8381;
+  font-size: 16px;
+  margin-top: 20px;
+  color: #6b8381;
 }
 
 /* blog */
 
-#post_preview {
+.posts {
   width: 100%;
 }
 
-#post_name {
+.post_preview {
+  width: 100%;
+}
+
+.post_name {
   font-size: 30px;
   padding: 0px;
 }
 
-#post_name_input {
-  width: 100%;
-}
-
-#post_author {
+.post_author {
   font-size: 12px;
   padding-top: 0px;
   padding-bottom: 0px;
   padding-left: 15px;
 }
 
-#post_body {
+.post_body {
   padding-top: 15px;
 }
 
-#post_body_textarea {
+.post_bottom {
+  font-size: 11px;
+}
+
+.post_name_input {
+  width: 100%;
+}
+
+.post_body_textarea {
   width: 100%;
   height: 500px;
 }
 
-#post_add {
+.post_add {
   width: 100%;
 }
 
-#post_bottom {
-  font-size: 11px;
-}
-
-#blog_numbers {
+.blog_numbers {
   font-size: 45px;
   padding-right: 25px;
 }
@@ -188,5 +175,3 @@ hr {
 .cmd {
  font-weight: bold;
 }
-
-

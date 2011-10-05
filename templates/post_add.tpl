@@ -1,11 +1,11 @@
 <form method = "POST" action = "?page=blog&add">
-  <table id = "post_add">
+  <table class = "post_add">
     <tr>
-      <td><input type = "text" name = "post_name" id = "post_name_input" />
+      <td><input type = "text" name = "post_name" class = "post_name_input" />
       </td>
     </tr>
     <tr>
-      <td><textarea name = "post_body" id = "post_body_textarea"></textarea>
+      <td><textarea name = "post_body" class = "post_body_textarea"></textarea>
       </td>
     </tr>
     <tr>
