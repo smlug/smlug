@@ -2,11 +2,13 @@
 $posts = '';
 $numbers = '';
 
-if(isset($_GET['add'], $_POST['post_name'], $_POST['post_body']) && !is_array($_POST['post_name']) && !is_array($_POST['post_body']))
-  if(mysql_query("INSERT INTO blog(`author`, `name`, `body`) VALUES('1', '" . mysql_real_escape_string($_POST['post_name']) . "', '" . mysql_real_escape_string($_POST['post_body']) . "')"))
+if(isset($_GET['add'], $_POST['post_name'], $_POST['post_body']) && !is_array($_POST['post_name']) && !is_array($_POST['post_body'])) {
+  $date = strtotime(date('Y-m-d H:i:s'));
+  if(mysql_query("INSERT INTO blog(`author`, `name`, `body`, `date`) VALUES('1', '" . mysql_real_escape_string($_POST['post_name']) . "', '" . mysql_real_escape_string($_POST['post_body']) . "', '$date')"))
     $content .= 'Запись успешно добавлена';
   else
     $content .= 'Возникла ошибка, запись не добавлена';
+}
 else if(isset($_GET['add']))
   $content .= file_get_contents('templates/post_add.tpl');
 else {
@@ -33,11 +35,11 @@ else {
         $author = $linuxoids_array[$j]['login'];
 
     //Выводим публикацию блога
-    $posts .= template('templates/post_preview.tpl', array(
+    @$posts .= template('templates/post_preview.tpl', array(
       'NAME' => '<a href = "">' . $posts_array[$i]['name'] . '</a>',
-      'AUTHOR' => '<font size = "4px">↑</font> ' . $author,
+      'AUTHOR' => $author,
       'BODY' => $posts_array[$i]['body'],
-      'DATE' => $posts_array[$i]['date'],
+      'DATE' => date('d.m.Y', $posts_array[$i]['date']),
       'NUMBER_OF_COMMENTS' => '5'
     ));
   }
