@@ -53,7 +53,7 @@ else {
     $numbers .= '↑ ';
 
   //Вывод номеров страниц
-  for($i = 1, $pages = ceil((count($posts_array) - 1) / $setting['posts_on_page']); $i <= $pages; $i++)
+  for($i = 1, $pages = ceil((count($posts_array) - 1) / $cfg['posts_on_page']); $i <= $pages; $i++)
     if($i == $_GET['number'])
       $numbers .= $i . ' ';
     else

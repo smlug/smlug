@@ -3,28 +3,34 @@ include('config.php');
 include('functions.php');
 
 //Подключение к базе данных
-@mysql_connect($mysql['server'], $mysql['user'], $mysql['password'])
+@mysql_connect($cfg['db_server'], $cfg['db_user'], $cfg['db_password'])
 or
-  die('Error connecting to database!');
+  die('Error occured during connecting to database!');
 
-@mysql_select_db($mysql['database'])
+@mysql_select_db($cfg['db_name'])
 or
-  die('Error database selection!');
+  die('Error occured during database selection!');
 
 //Переменная, отвечающая за основной контент
 $content = '';
+//Блок ссылок
+$links = '';
 
 //Выбор страницы
 if(isset($_GET['page']))
   switch($_GET['page']) {
-    case 'registration':
-      include('registration.php');
+    //Pages are sorted alphabetically
+    case 'blog':
+      include('blog.php');
+      break;  
+    case 'participate':
+      include('participate.php');
       break;
     case 'linuxoids':
       include('linuxoids.php');
       break;
-    case 'blog':
-      include('blog.php');
+    case 'registration':
+      include('registration.php');
       break;
   }
 else
@@ -36,6 +42,7 @@ echo template('templates/scheme.tpl', array(
   'TOP' => '',
   'CONTENT' => $content,
   'BLOCK' => file_get_contents('templates/navigation.tpl'),
+  'LINKS' => $links,
   'BOTTOM' => 'SmLUG 2011'
 ));
 ?>

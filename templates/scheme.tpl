@@ -21,6 +21,7 @@
       </td>
       <td id = "block" valign = "top">
         <aside>{BLOCK}</aside>
+        <aside class='links'>{LINKS}</aside>
       </td>
     </tr>
     <tr>
