@@ -4,7 +4,7 @@ $numbers = '';
 
 if(isset($_GET['add'], $_POST['post_name'], $_POST['post_body']) && !is_array($_POST['post_name']) && !is_array($_POST['post_body'])) {
   $date = strtotime(date('Y-m-d H:i:s'));
-  if(mysql_query("INSERT INTO blog(`author`, `name`, `body`, `date`) VALUES('1', '" . mysql_real_escape_string($_POST['post_name']) . "', '" . mysql_real_escape_string($_POST['post_body']) . "', '$date')"))
+  if(mysql_query("INSERT INTO blog(`author`, `name`, `body`, `date`) VALUES('1', '" . htmlentities(mysql_real_escape_string($_POST['post_name'])) . "', '" . htmlentities(mysql_real_escape_string($_POST['post_body'])) . "', '$date')"))
     $content .= 'Запись успешно добавлена';
   else
     $content .= 'Возникла ошибка, запись не добавлена';
@@ -20,15 +20,16 @@ else {
   //Получаем список публикаций и заносим в массив
   $posts_array = array();
   $blog_query = mysql_query('SELECT * FROM blog');
-  while($posts_array[] = mysql_fetch_assoc($blog_query));
-  $posts_array_count = count($posts_array);
+  while($posts_array[] = mysql_fetch_assoc($blog_query)); //echo '<pre>'; var_dump($posts_array);
+  sort($posts_array);
+  $posts_array_count = count($posts_array); //var_dump($posts_array); echo '</pre>';
 
   $pages = ceil((count($posts_array) - 1) / $cfg['posts_on_page']);
   if(empty($_GET['number']) || $_GET['number'] > $pages)
     $_GET['number'] = 1;
 
   //Вывод публикаций блога
-  for($i = $posts_array_count - 2 - ($_GET['number'] * $cfg['posts_on_page'] - $cfg['posts_on_page']), $older_post_on_page = $posts_array_count - 2 - ($_GET['number'] * $cfg['posts_on_page']); $i >= 0 && $i > $older_post_on_page; $i--) {
+  for($i = $posts_array_count - 1 /* sort() переносит false с конца в начало, поэтому -1, а не -2, так и в следующей переменной */ - ($_GET['number'] * $cfg['posts_on_page'] - $cfg['posts_on_page']), $older_post_on_page = $posts_array_count - 1 - ($_GET['number'] * $cfg['posts_on_page']); $i >= 0 && $i > $older_post_on_page; $i--) {
     //Узнаём имя автора по его идентификатору
     for($j = 0, $linuxoids_array_count = count($linuxoids_array); $j < $linuxoids_array_count; $j++)
       if($linuxoids_array[$j]['id'] == $posts_array[$i]['author'])
