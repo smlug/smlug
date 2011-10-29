@@ -12,6 +12,9 @@ or
 or
   die('Error occured during database selection!');
 
+mysql_query("SET CHARACTER SET utf8");
+mysql_query("SET NAMES utf8");
+
 //Переменная, отвечающая за основной контент
 $content = '';
 //Блок ссылок

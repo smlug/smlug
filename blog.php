@@ -1,52 +1,66 @@
 <?php
-$posts = '';
-$numbers = '';
-
+//Добавление поста
 if(isset($_GET['add'], $_POST['post_name'], $_POST['post_body']) && !is_array($_POST['post_name']) && !is_array($_POST['post_body'])) {
-  $date = strtotime(date('Y-m-d H:i:s'));
-  if(mysql_query("INSERT INTO blog(`author`, `name`, `body`, `date`) VALUES('1', '" . htmlentities(mysql_real_escape_string($_POST['post_name'])) . "', '" . htmlentities(mysql_real_escape_string($_POST['post_body'])) . "', '$date')"))
+  if(mysql_query("INSERT INTO blog(`author`, `name`, `body`, `date`) VALUES('1', '" . htmlspecialchars(mysql_real_escape_string($_POST['post_name'])) . "', '" . htmlspecialchars(mysql_real_escape_string($_POST['post_body'])) . "', " . time() . ")"))
     $content .= 'Запись успешно добавлена';
   else
     $content .= 'Возникла ошибка, запись не добавлена';
 }
+//Ввод для обавления поста
 else if(isset($_GET['add']))
   $content .= file_get_contents('templates/post_add.tpl');
+else if(isset($_GET['post']) && is_numeric($_GET['post'])) {
+  $post = mysql_query("SELECT * FROM blog WHERE id = " . $_GET['post']);
+  $post_array[] = mysql_fetch_assoc($post);
+
+  //Узнаём автора
+  $author = mysql_fetch_assoc(mysql_query("SELECT login FROM linuxoids WHERE id = " . $post_array[0]['author']));
+
+  @$content .= template('templates/post_preview.tpl', array(
+    'NAME' => '<a href = "?page=blog">блог</a>&nbsp;→&nbsp;' . $post_array[0]['name'],
+    'AUTHOR' => $author['login'],
+    'BODY' => $post_array[0]['body'],
+    'DATE' => date('d.m.Y', $post_array[0]['date']),
+    'NUMBER_OF_COMMENTS' => '5'
+  ));
+}
+//Основной вывод блога
 else {
-  //Получаем список линуксоидов и заносим в массив
-  $linuxoids_array = array();
-  $linuxoids_query = mysql_query("SELECT id, login FROM linuxoids");
-  while($linuxoids_array[] = mysql_fetch_assoc($linuxoids_query));
+  //Подсчитываем кол-во постов и страниц
+  $count_of_posts = mysql_fetch_assoc(mysql_query("SELECT COUNT(*) FROM blog"));
+  $pages = ceil($count_of_posts['COUNT(*)'] / $cfg['posts_on_page']);
 
-  //Получаем список публикаций и заносим в массив
-  $posts_array = array();
-  $blog_query = mysql_query('SELECT * FROM blog');
-  while($posts_array[] = mysql_fetch_assoc($blog_query)); //echo '<pre>'; var_dump($posts_array);
-  sort($posts_array);
-  $posts_array_count = count($posts_array); //var_dump($posts_array); echo '</pre>';
-
-  $pages = ceil((count($posts_array) - 1) / $cfg['posts_on_page']);
+  //Если в запросе не указан номер страницы...
   if(empty($_GET['number']) || $_GET['number'] > $pages)
     $_GET['number'] = 1;
 
-  //Вывод публикаций блога
-  for($i = $posts_array_count - 1 /* sort() переносит false с конца в начало, поэтому -1, а не -2, так и в следующей переменной */ - ($_GET['number'] * $cfg['posts_on_page'] - $cfg['posts_on_page']), $older_post_on_page = $posts_array_count - 1 - ($_GET['number'] * $cfg['posts_on_page']); $i >= 0 && $i > $older_post_on_page; $i--) {
-    //Узнаём имя автора по его идентификатору
-    for($j = 0, $linuxoids_array_count = count($linuxoids_array); $j < $linuxoids_array_count; $j++)
-      if($linuxoids_array[$j]['id'] == $posts_array[$i]['author'])
-        $author = $linuxoids_array[$j]['login'];
+  //Вывод постов
+  $posts = '';
+  $begin = $_GET['number'] * $cfg['posts_on_page'] - $cfg['posts_on_page'];
+  $blog_query = mysql_query("SELECT * FROM blog ORDER BY id DESC LIMIT $begin, {$cfg['posts_on_page']}") or die(mysql_error());
+  while($get_post = mysql_fetch_assoc($blog_query)) {
+    //Узнаём автора
+    $author = mysql_fetch_assoc(mysql_query("SELECT login FROM linuxoids WHERE id = " . $get_post['author']));
+
+    //Сокращение поста для превью
+    if(strlen($get_post['body']) > $cfg['characters_in_preview'])
+      $body = substr($get_post['body'], 0, $cfg['characters_in_preview']) . '&nbsp;<a href = "?page=blog&post=' . $get_post['id'] . '">......</a>';
+    else
+      $body = $get_post['body'];
 
     //Выводим публикацию блога
     @$posts .= template('templates/post_preview.tpl', array(
-      'NAME' => '<a href = "">' . $posts_array[$i]['name'] . '</a>',
-      'AUTHOR' => $author,
-      'BODY' => $posts_array[$i]['body'],
-      'DATE' => date('d.m.Y', $posts_array[$i]['date']),
+      'NAME' => '<a href = "?page=blog&post=' . $get_post['id'] . '">' . $get_post['name'] . '</a>',
+      'AUTHOR' => $author['login'],
+      'BODY' => $body,
+      'DATE' => date('d.m.Y, H:i', $get_post['date']),
       'NUMBER_OF_COMMENTS' => '5'
     ));
   }
 
   /* Постраничная навигация */
 
+  $numbers = '';
   $previous = $_GET['number'] - 1;
   $next = $_GET['number'] + 1;
 
