@@ -1,4 +1,7 @@
 <?php
+if(!isset($main_page))
+  exit();
+
 //Добавление поста
 if(isset($_GET['add'], $_POST['post_name'], $_POST['post_body']) && !is_array($_POST['post_name']) && !is_array($_POST['post_body'])) {
   if(mysql_query("INSERT INTO blog(`author`, `name`, `body`, `date`) VALUES('1', '" . htmlspecialchars(mysql_real_escape_string($_POST['post_name'])) . "', '" . htmlspecialchars(mysql_real_escape_string($_POST['post_body'])) . "', " . time() . ")"))

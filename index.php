@@ -20,6 +20,7 @@ $content = '';
 //Блок ссылок
 $links = '';
 
+$main_page = '';
 //Выбор страницы
 if(isset($_GET['page']))
   switch($_GET['page']) {
