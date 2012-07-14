@@ -1,0 +1,12 @@
+<table>
+  <tr>
+    <td>
+      {LOGIN}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      {EMAIL}
+    </td>
+  </tr>
+</table>

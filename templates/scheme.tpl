@@ -10,8 +10,7 @@
     <tr>
       <td class = "top_of_main_table" colspan = "2" valign = "top">
         <header class = "nav_bar">
-          Можно <a href = "?page=login">зайти</a>&nbsp;или, например, <a href = "?page=registration">добавиться</a><br />
-          <a href = "?"><font class = "smlug_en_link">SmLUG</font></a><font class = "smlug_ru"> ака СмГПЛ</font>
+          {NAV_BAR}
         </header>
       </td>
     </tr>

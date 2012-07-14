@@ -3,14 +3,14 @@ if(!isset($main_page))
   exit();
 
 //Добавление поста
-if(isset($_GET['add'], $_POST['post_name'], $_POST['post_body']) && !is_array($_POST['post_name']) && !is_array($_POST['post_body'])) {
-  if(mysql_query("INSERT INTO blog(`author`, `name`, `body`, `date`) VALUES('1', '" . htmlspecialchars(mysql_real_escape_string($_POST['post_name'])) . "', '" . htmlspecialchars(mysql_real_escape_string($_POST['post_body'])) . "', " . time() . ")"))
+if($_SESSION['logined'] && isset($_GET['add'], $_POST['post_name'], $_POST['post_body']) && !is_array($_POST['post_name']) && !is_array($_POST['post_body'])) {
+  if(mysql_query("INSERT INTO blog(`author`, `name`, `body`, `date`) VALUES('" . $_SESSION['id'] . "', '" . htmlspecialchars(mysql_real_escape_string($_POST['post_name'])) . "', '" . htmlspecialchars(mysql_real_escape_string($_POST['post_body'])) . "', " . time() . ")"))
     $content .= 'Запись успешно добавлена';
   else
     $content .= 'Возникла ошибка, запись не добавлена';
 }
-//Ввод для обавления поста
-else if(isset($_GET['add']))
+//Ввод для добавления поста
+else if($_SESSION['logined'] && isset($_GET['add']))
   $content .= file_get_contents('templates/post_add.tpl');
 else if(isset($_GET['post']) && is_numeric($_GET['post'])) {
   $post = mysql_query("SELECT * FROM blog WHERE id = " . $_GET['post']);
@@ -21,7 +21,8 @@ else if(isset($_GET['post']) && is_numeric($_GET['post'])) {
 
   @$content .= template('templates/post_preview.tpl', array(
     'NAME' => '<a href = "?page=blog">блог</a>&nbsp;→&nbsp;' . $post_array[0]['name'],
-    'AUTHOR' => $author['login'],
+    'AUTHOR_ID' => $post_array[0]['author'],
+    'AUTHOR_LOGIN' => $author['login'],
     'BODY' => $post_array[0]['body'],
     'DATE' => date('d.m.Y', $post_array[0]['date']),
     'NUMBER_OF_COMMENTS' => '5'
@@ -54,7 +55,8 @@ else {
     //Выводим публикацию блога
     @$posts .= template('templates/post_preview.tpl', array(
       'NAME' => '<a href = "?page=blog&post=' . $get_post['id'] . '">' . $get_post['name'] . '</a>',
-      'AUTHOR' => $author['login'],
+      'AUTHOR_ID' => $get_post['author'],
+      'AUTHOR_LOGIN' => $author['login'],
       'BODY' => $body,
       'DATE' => date('d.m.Y, H:i', $get_post['date']),
       'NUMBER_OF_COMMENTS' => '5'
